@@ -2,13 +2,18 @@ version: 0.2
 
 phases:
   install:
+    runtime-versions:
+      nodejs: 18
     commands:
-      - echo Installing Node dependencies...
       - npm install
+
   build:
     commands:
-      - echo Building React app...
       - npm run build
+      # Copy deployment files into build folder
+      - cp appspec.yml build/
+      - mkdir -p build/scripts
+      - cp scripts/restart_server.sh build/scripts/
 
 artifacts:
   files:
