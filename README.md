@@ -1,70 +1,118 @@
-# Getting Started with Create React App
+📦 GlobalMart React CI/CD on AWS (CodePipeline + CodeBuild + CodeDeploy + EC2)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project demonstrates a full CI/CD pipeline for deploying a React application on AWS using:
 
-## Available Scripts
+GitHub (Source)
 
-In the project directory, you can run:
+AWS CodePipeline
 
-### `npm start`
+AWS CodeBuild
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+AWS CodeDeploy
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Amazon EC2
 
-### `npm test`
+Node.js runtime
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+🚀 Architecture Overview
+GitHub → CodePipeline → CodeBuild → S3 Artifacts → CodeDeploy → EC2 → Production App
 
-### `npm run build`
+📁 Repository Structure
+├── appspec.yml
+├── buildspec.yml
+├── scripts/
+│   └── restart_server.sh
+├── public/
+├── src/
+├── package.json
+└── README.md
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+⚙️ CI/CD Flow
+1️⃣ Git Push
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Whenever a commit is pushed to main, CodePipeline is triggered automatically.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2️⃣ CodeBuild
 
-### `npm run eject`
+Installs Node.js & dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Builds React application using npm run build
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Uploads artifacts to S3
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+3️⃣ CodeDeploy
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Copies build output to the EC2 instance
 
-## Learn More
+Runs scripts/restart_server.sh to restart the app
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+4️⃣ Serve React App
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Node.js HTTP server serves the production build.
 
-### Code Splitting
+🧪 Testing the App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Once deployed:
 
-### Analyzing the Bundle Size
+http://<EC2-Public-IP>:3000/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+🛠️ Key Difficulties Faced & How They Were Solved
+✔️ 1. S3 Artifact Access Denied
 
-### Making a Progressive Web App
+Error: Insufficient S3 permissions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Fix: Updated CodePipeline IAM role & bucket policy with:
 
-### Advanced Configuration
+GetObject
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+PutObject
 
-### Deployment
+ListBucket
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+✔️ 2. CodeDeploy Failing — “appspec.yml not found”
 
-### `npm run build` fails to minify
+Cause: Wrong file placement in ZIP
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Fix: Ensure appspec.yml exists at the root of the repository
+
+✔️ 3. React not loading on EC2
+
+Cause: Using the development server (npm start)
+
+Fix: Use production build + Node static server:
+
+serve -s build
+
+
+or use Node HTTP server or nginx.
+
+✔️ 4. Port Not Accessible
+
+Cause: EC2 Security group missing inbound rule
+
+Fix: Allowed port 3000 in SG.
+
+🧾 Deployment Scripts
+appspec.yml
+
+Used by CodeDeploy for copying files & running scripts.
+
+restart_server.sh
+
+Starts Node.js server using nohup.
+
+📚 Learning Outcomes
+
+CI/CD automation using AWS developer tools
+
+Debugging real-world CodeBuild + CodeDeploy problems
+
+Setting up a production React environment on EC2
+
+IAM access management
+
+S3 artifact handling
+
+⚡ Final Result
+
+A fully automated AWS CI/CD pipeline deploying a React app to EC2 on every GitHub push.
