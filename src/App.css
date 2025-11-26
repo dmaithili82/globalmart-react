@@ -1,38 +1,66 @@
+/* Background */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
   min-height: 100vh;
+  background: linear-gradient(135deg, #1f1c2c, #928dab);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding: 20px;
   color: white;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.App-link {
-  color: #61dafb;
+/* Card */
+.card {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px 50px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  animation: float 3s ease-in-out infinite;
+  max-width: 600px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Heading */
+.card h1 {
+  margin-bottom: 15px;
+  font-size: 2.2rem;
+}
+
+/* Subtitle */
+.subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  color: #dcdcdc;
+}
+
+/* Tech text */
+.tech {
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  color: #b8e2ff;
+}
+
+/* Button */
+.action-btn {
+  padding: 12px 28px;
+  background-color: #61dafb;
+  border: none;
+  color: #1f1f1f;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.action-btn:hover {
+  background-color: #39bbee;
+}
+
+/* Floating animation */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
 }

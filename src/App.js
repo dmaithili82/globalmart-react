@@ -1,23 +1,22 @@
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
+      <div className="card">
+        <h1>🚀 GlobalMart React Application</h1>
+        <p className="subtitle">
+          Fully automated CI/CD pipeline using AWS CodePipeline, CodeBuild & CodeDeploy
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+        <p className="tech">
+          EC2 • CodePipeline • GitHub • CodeBuild • CodeDeploy
+        </p>
+
+        <button className="action-btn">
+          View Deployment
+        </button>
+      </div>
     </div>
   );
 }
